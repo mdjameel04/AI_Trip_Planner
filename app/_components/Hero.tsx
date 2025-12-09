@@ -1,7 +1,7 @@
 import React from 'react'
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from '@/components/ui/button'
-import { Globe2, Landmark, Plane, Send } from 'lucide-react'
+import { ArrowDown, Globe2, Landmark, Plane, Send } from 'lucide-react'
 import { HeroVideoDialog } from '@/components/ui/hero-video-dialog'
 const Hero = () => {
 
@@ -24,9 +24,9 @@ const Hero = () => {
         },
     ]
   return (
-    <div className='mt-24 flex justify-center'>
+    <div className='mt-24 flex justify-center '>
   {/* content */}
-    <div className='max-w-3xl w-full text-center space-y-6'>
+    <div className='max-w-3xl w-full text-center space-y-6 ' >
         <h2 className='text-xl font-bold md:text-5xl'> Hey, I'm Your Personal <span className='text-primary'> Trip planner </span></h2>
   <p className='text-lg'> Tell me what you want, and I,ll handle rest: Flights, hotels, trip planner --all in seconds </p>
 
@@ -39,8 +39,8 @@ const Hero = () => {
             <Button size={"icon"} className='absolute bottom-6 right-6'> 
                 <Send className='h-4 w-4'/>
             </Button>
-
         </div>
+
     </div>
     {/* Suggestion list */}
         <div className='flex gap-5'>
@@ -50,8 +50,10 @@ const Hero = () => {
              <h2 className='text-sm'>{suggestions.title} </h2>
                 </div>
             ))}
-            </div> 
-
+            </div>
+                 
+    <div className='flex flex-col items-center justify-center '>
+            <h2 className='my-7 mt-14 flex gap-2 text-center'> Not Sure where to start <strong>See how it works </strong> <ArrowDown/> </h2>
     {/* Video Section */}
    <HeroVideoDialog
   className="block dark:hidden"
@@ -60,7 +62,7 @@ const Hero = () => {
   thumbnailSrc="https://mma.prnewswire.com/media/2401528/1_MindtripProduct.jpg?p=facebook"
   thumbnailAlt="Dummy Video Thumbnail"
 />
-   
+   </div>
 
 
     </div>
