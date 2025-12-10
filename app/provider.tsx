@@ -1,5 +1,6 @@
 import React from 'react'
 import Header from './_components/Header';
+import { PopularCityList } from './_components/PopularCityList';
 
 function Provider({
   children,
@@ -10,6 +11,7 @@ function Provider({
   return (
     <div>
         <Header/> 
+       
       {children}
     </div>
   )
