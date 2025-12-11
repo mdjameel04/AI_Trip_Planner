@@ -2,12 +2,36 @@
 
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import { Send } from 'lucide-react'
-import React from 'react'
+import axios from 'axios'
+import { Send} from 'lucide-react'
+import React, { useState } from 'react'
+
+type Messages={
+  role : string,
+  content: string
+}
 
 const ChatBox = () => {
-const onSend =()=>{
+const [messages, setMessages] = useState<Messages[]>([]);
+const [userInput, setUserInput] = useState<string>();
+const onSend =async()=>{
+if(!userInput?.trim()) return;
 
+setUserInput("");
+const newMsg:Messages={
+  role:"user",
+  content:userInput
+}
+setMessages((prev:Messages[])=>[...prev,newMsg])
+
+const result = await axios.post('/api/aimodel',{
+  messages:[...messages,newMsg]
+});
+setMessages((prev:Messages[])=>[...prev,{
+  role:'assistant',
+  content: result?.data?.resp
+}])
+console.log(result.data)
 }
     
   return (
@@ -31,6 +55,8 @@ const onSend =()=>{
      <div className='relative border p-4 rounded-2xl' >
             <Textarea placeholder=' create a trip for paris from New York  '
             className='w-full h-28 bg-transparent  border-none  focus-visible:ring-0 shadow-none resize-none'
+            onChange={(event)=>setUserInput(event.target.value)}
+            value={userInput}
             /> 
             <Button size={"icon"} className='absolute bottom-6 right-6' onClick={()=>onSend()}> 
                 <Send className='h-4 w-4'/>
