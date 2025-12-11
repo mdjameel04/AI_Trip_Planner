@@ -36,6 +36,7 @@ const Hero = () => {
             return;
         }
         // Navigate to Create Trip Planner web SCreen
+          
     }
 
   return (

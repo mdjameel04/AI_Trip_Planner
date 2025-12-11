@@ -44,7 +44,7 @@ const {user} = useUser()
          <Button> Get Started </Button>
       </SignInButton>:
       <div className='flex gap-4 items-center '>
-      <Link href={"/create-new trip"}>
+      <Link href={"/create-new-trip"}>
       <Button> Create new Trip</Button>
       </Link>
        <UserButton></UserButton>
