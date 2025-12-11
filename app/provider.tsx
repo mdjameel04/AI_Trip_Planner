@@ -1,11 +1,11 @@
 
 "use client"
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Header from './_components/Header';
-import { PopularCityList } from './_components/PopularCityList';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { useUser } from '@clerk/nextjs';
+import { UserDetailContext } from '@/context/UserDetailContext';
 
 function Provider({
   children,
@@ -13,8 +13,8 @@ function Provider({
   children: React.ReactNode;
 }>) {
 // calls the backend when user logs in
-
   const CreateUser = useMutation(api.user.CreateNewUser)
+  const [userDetail, setUserDetail] = useState<any>();
   const {user} = useUser();
   
 useEffect(()=>{
@@ -29,18 +29,25 @@ const CreateNewUser = async()=>{
         imageUrl: user?.imageUrl ?? "",
         name : user?.fullName ?? ""
   })
+      setUserDetail(result)
 }
 }
 
 
 
   return (
+    <UserDetailContext.Provider value={{ userDetail, setUserDetail}}>
     <div>
         <Header/> 
        
       {children}
     </div>
+    </UserDetailContext.Provider>
   )
 }
 
 export default Provider
+
+export const useUserDetail =()=>{
+  return useContext(UserDetailContext)
+}
