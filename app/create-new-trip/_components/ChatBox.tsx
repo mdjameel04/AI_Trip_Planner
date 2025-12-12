@@ -6,10 +6,14 @@ import axios from 'axios'
 import { Loader, Send} from 'lucide-react'
 import React, { useState } from 'react'
 import EmptyBoxState from './EmptyBoxState'
+import GroupSizeUi from './GroupSizeUi'
+import BudgetUi from './BudgetUi'
+import FinalUi from './FinalUi'
 
 type Messages={
   role : string,
-  content: string
+  content: string,
+  ui?: string
 }
 
 const ChatBox = () => {
@@ -22,7 +26,7 @@ setLoading(true)
 setUserInput("");
 const newMsg:Messages={
   role:"user",
-  content:userInput
+  content:userInput,
 }
 setMessages((prev:Messages[])=>[...prev,newMsg])
 
@@ -31,12 +35,24 @@ const result = await axios.post('/api/aimodel',{
 });
 setMessages((prev:Messages[])=>[...prev,{
   role:'assistant',
-  content: result?.data?.resp
+  content: result?.data?.resp,
+  ui: result?.data?.ui
 }])
 console.log(result.data)
 setLoading(false)
 }
-    
+    const RenderGenrativeUi=(ui?:string)=>{
+      if(ui=="budget"){
+        // Budget Ui Component
+        return <BudgetUi  onSelectOption={(v:string)=>{setUserInput(v), onSend}}   />
+      } else if(ui=="groupSize") {
+      // Group size ui
+      return <GroupSizeUi onSelectOption={(v:string)=>{setUserInput(v); onSend}} />
+      } else if(ui=="final") {
+        return <FinalUi  onSelectOption={(v:string)=>{setUserInput(v) ,onSend}} /> 
+      }
+      return null
+    }
   return (
     <div className='h-[85vh] flex flex-col '>
       {messages?.length==0 && 
@@ -54,6 +70,7 @@ setLoading(false)
         <div className='flex justify-start mt-2'>
    <div className='max-w-lg bg-gray-100 text-black px-4 py-2 rounded-lg'>
      {msg.content}
+     {RenderGenrativeUi(msg.ui??"")}
    </div>
         </div>
        ))}
