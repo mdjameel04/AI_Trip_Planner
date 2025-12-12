@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
 const {messages} = await req.json()
 try{
 const completion = await openai.chat.completions.create({
-    model: "openai/gpt-4.1-mini",
+     model: "google/gemini-2.5-flash-lite-preview-09-2025",
     response_format: {type:"json_object"},
     messages: [
         {
