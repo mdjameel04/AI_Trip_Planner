@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea'
 import axios from 'axios'
 import { Loader, Send} from 'lucide-react'
 import React, { useState } from 'react'
+import EmptyBoxState from './EmptyBoxState'
 
 type Messages={
   role : string,
@@ -38,6 +39,9 @@ setLoading(false)
     
   return (
     <div className='h-[85vh] flex flex-col '>
+      {messages?.length==0 && 
+      <EmptyBoxState
+       onSelectOption={(v:string)=>{setUserInput(v), onSend()}}/>}
         {/* Display Messages */}
         <section className='flex-1 overflow-y-auto'>
        {messages.map((msg:Messages,index)=>(
