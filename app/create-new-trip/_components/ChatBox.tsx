@@ -10,6 +10,10 @@ import GroupSizeUi from './GroupSizeUi'
 import BudgetUi from './BudgetUi'
 import FinalUi from './FinalUi'
 import SelectDays from './SelectDays'
+import { useMutation } from 'convex/react'
+import { api } from '@/convex/_generated/api'
+import { useUserDetail } from '@/app/provider'
+import { v4 as uuidv4 } from 'uuid';
 
 type Messages={
   role : string,
@@ -33,6 +37,8 @@ const [userInput, setUserInput] = useState<string>();
 const [loading, setLoading] = useState(false);
 const [isFinal, setIsFinal] = useState(false);
 const [tripDeatail, setTripDeatail] = useState();
+const {userDetail, setUserDetail} = useUserDetail( )
+const SaveTripDetails = useMutation(api.tripDetail.CreateTripDetail)
 const onSend =async()=>{
 if(!userInput?.trim()) return;
 setLoading(true)
@@ -56,7 +62,13 @@ console.log( "Trip",result.data)
 }])
 
 if(isFinal) {
-  setTripDeatail(result.data.trip_plan)
+  setTripDeatail(result?.data?.trip_plan);
+  const tripId = uuidv4();
+  await SaveTripDetails({
+    tripDetail: result?.data?.trip_plan,
+    tripId: tripId,
+    uid:userDetail?._id
+  })
 }
  
 console.log(result.data)
@@ -69,7 +81,7 @@ setLoading(false)
       } else if(ui=="groupSize") {
       // Group size ui
       return <GroupSizeUi onSelectOption={(v:string)=>{setUserInput(v),onSend()}} />
-      } else if(ui=="tripDuration") {
+      } else if(ui=="TripDuration") {
         return <SelectDays  onSelectOption={(v:string)=>{setUserInput(v),onSend()}} /> 
       } else if(ui== "final"){
         return <FinalUi viewTrip={()=> console.log()}

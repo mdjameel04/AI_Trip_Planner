@@ -10,4 +10,12 @@ export default defineSchema({
     email: v.string(),
     SubscriptIcon: v.optional( v.string(),)
   }),
+
+ TripDetails:defineTable({
+  tripId: v.string(),
+  tripDetail: v.any(),
+  uid: v.id("UserTable")
+  
+ })
+
 });
