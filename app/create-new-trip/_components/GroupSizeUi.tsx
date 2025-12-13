@@ -35,7 +35,7 @@ const GroupSizeUi = ({onSelectOption}:any) => {
   return (
     <div className='grid grid-cols-2 md:grid-cols-4 gap-2 items-center mt-1'>
    {SelectTravelesList.map((item,index)=>(
-    <div className='p-3 border rounded-2xl bg-white hover:border-primary cursor-pointer '
+    <div className='p-3 border rounded-2xl bg-white hover:border-primary cursor-pointer ' key={index}
     onClick={()=>onSelectOption(item.title+""+item.people) }>
          <h2>{item.icon} </h2>
          <h2>{item.title} </h2>

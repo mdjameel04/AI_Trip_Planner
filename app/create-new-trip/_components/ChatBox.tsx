@@ -4,11 +4,12 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import axios from 'axios'
 import { Loader, Send} from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import EmptyBoxState from './EmptyBoxState'
 import GroupSizeUi from './GroupSizeUi'
 import BudgetUi from './BudgetUi'
 import FinalUi from './FinalUi'
+import SelectDays from './SelectDays'
 
 type Messages={
   role : string,
@@ -20,39 +21,69 @@ const ChatBox = () => {
 const [messages, setMessages] = useState<Messages[]>([]);
 const [userInput, setUserInput] = useState<string>();
 const [loading, setLoading] = useState(false);
+const [isFinal, setIsFinal] = useState(false);
+const [tripDeatail, setTripDeatail] = useState();
 const onSend =async()=>{
 if(!userInput?.trim()) return;
 setLoading(true)
 setUserInput("");
 const newMsg:Messages={
   role:"user",
-  content:userInput,
+  content:userInput ?? "",
 }
 setMessages((prev:Messages[])=>[...prev,newMsg])
 
 const result = await axios.post('/api/aimodel',{
-  messages:[...messages,newMsg]
+  messages:[...messages,newMsg],
+  isFinal:isFinal
 });
-setMessages((prev:Messages[])=>[...prev,{
+
+console.log( "Trip",result.data)
+ !isFinal&& setMessages((prev:Messages[])=>[...prev,{
   role:'assistant',
   content: result?.data?.resp,
   ui: result?.data?.ui
 }])
+
+if(isFinal) {
+  setTripDeatail(result.data.trip_plan)
+}
+ 
 console.log(result.data)
 setLoading(false)
 }
     const RenderGenrativeUi=(ui?:string)=>{
       if(ui=="budget"){
         // Budget Ui Component
-        return <BudgetUi  onSelectOption={(v:string)=>{setUserInput(v), onSend}}   />
+        return <BudgetUi  onSelectOption={(v:string)=>{setUserInput(v), onSend()}}   />
       } else if(ui=="groupSize") {
       // Group size ui
-      return <GroupSizeUi onSelectOption={(v:string)=>{setUserInput(v); onSend}} />
-      } else if(ui=="final") {
-        return <FinalUi  onSelectOption={(v:string)=>{setUserInput(v) ,onSend}} /> 
+      return <GroupSizeUi onSelectOption={(v:string)=>{setUserInput(v),onSend()}} />
+      } else if(ui=="tripDuration") {
+        return <SelectDays  onSelectOption={(v:string)=>{setUserInput(v),onSend()}} /> 
+      } else if(ui== "final"){
+        return <FinalUi viewTrip={()=> console.log()}
+        disable= {!tripDeatail}
+        />
       }
       return null
     }
+
+   useEffect(()=>{
+   const lastMsg= messages[messages.length-1]
+   if(lastMsg?.ui=="final"){
+    setIsFinal( true);
+    setUserInput("Ok great !")
+    // onSend()
+   }
+   },[messages])
+
+   useEffect(()=>{
+    if(isFinal &&userInput){
+        onSend()
+    }
+   },[isFinal])
+
   return (
     <div className='h-[85vh] flex flex-col '>
       {messages?.length==0 && 
