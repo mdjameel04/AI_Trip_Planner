@@ -17,6 +17,16 @@ type Messages={
   ui?: string
 }
 
+type TripInfo ={
+  budget: string,
+  destination : string,
+  duration: string,
+  group_size: string,
+  origin:  string,
+  hotels : any,
+  itinerary: any
+}
+
 const ChatBox = () => {
 const [messages, setMessages] = useState<Messages[]>([]);
 const [userInput, setUserInput] = useState<string>();
