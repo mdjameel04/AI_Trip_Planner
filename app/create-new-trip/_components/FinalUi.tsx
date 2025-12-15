@@ -9,7 +9,7 @@ const FinalUi = ({viewTtrip, disable}:any) => {
         <h2 className='mt-3 text-lg font-semibold text-primary'> Planning your dream Trip... </h2>
 <p className='text-gray-500 text-sm text-center mt-1'> Gathering best destinations, activities, and travel details for you  </p>
 
-<Button disabled={disable} onClick={viewTtrip} className='mt-2 w-full'> View Trip</Button>
+<Button disabled={disable} onClick={viewTtrip} className='mt-2 w-full '> View Trip</Button>
     </div>
   )
 }
